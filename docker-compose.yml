@@ -1,0 +1,98 @@
+cephmon:
+    image: ceph/daemon
+    net: "host"
+    environment:
+        - MON_IP=172.17.0.1
+        - CEPH_PUBLIC_NETWORK=172.17.0.0/16
+        - CEPH_DAEMON=MON
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+        - /var/run/ceph:/var/run/ceph
+
+# cephmon2:
+#     image: ceph/daemon
+#     net: "host"
+#     environment:
+#         - MON_IP=172.17.0.2
+#         - CEPH_PUBLIC_NETWORK=172.17.0.0/16
+#         - CEPH_DAEMON=MON
+#     volumes:
+#         - /etc/ceph:/etc/ceph
+#         - /var/lib/ceph/:/var/lib/ceph/
+#         - /var/run/ceph:/var/run/ceph
+
+cephosd1:
+    image: ceph/daemon
+    net: "host"
+    environment:
+        - CEPH_DAEMON=OSD_CEPH_DISK
+        - OSD_TYPE=activate
+        - OSD_DEVICE=/dev/sdb
+        - OSD_FORCE_ZAP=1 
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+        - /var/run/ceph:/var/run/ceph
+        - /dev/:/dev/
+    privileged: true
+
+cephosd2:
+    image: ceph/daemon
+    net: "host"
+    environment:
+        - CEPH_DAEMON=OSD_CEPH_DISK
+        - OSD_TYPE=activate
+        - OSD_DEVICE=/dev/sdc
+        - OSD_FORCE_ZAP=1 
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+        - /var/run/ceph:/var/run/ceph
+        - /dev/:/dev/
+    privileged: true
+
+cephosd3:
+    image: ceph/daemon
+    net: "host"
+    environment:
+        - CEPH_DAEMON=OSD_CEPH_DISK
+        - OSD_TYPE=activate
+        - OSD_DEVICE=/dev/sdd
+        - OSD_FORCE_ZAP=1 
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+        - /var/run/ceph:/var/run/ceph
+        - /dev/:/dev/
+    privileged: true
+
+cephmds:
+    image: ceph/daemon
+    net: "host"
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+    environment:
+        - CEPH_DAEMON=MDS
+        - CEPHFS_CREATE=1
+
+cephrados:
+    image: ceph/daemon
+    net: "host"
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
+        - /var/run/ceph:/var/run/ceph
+    environment:
+        - CEPH_DAEMON=RGW
+
+cephrestapi:
+    image: ceph/daemon
+    net: "host"
+    environment:
+        - CEPH_DAEMON=RESTAPI
+        - RESTAPI_IP=172.17.0.1
+    volumes:
+        - /etc/ceph:/etc/ceph
+        - /var/lib/ceph/:/var/lib/ceph/
